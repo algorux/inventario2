@@ -13,6 +13,9 @@ Route::get('/dashboard', function () {
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
+
+    Route::get('/resumen', [InventoryController::class, 'resumen'])->name('resumen');
+
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
@@ -22,6 +25,10 @@ Route::middleware('auth')->group(function () {
     Route::post('/registrar_elem', [InventoryController::class, 'registerStoreElem'])->name('registrar.storelem');
 
     Route::post('/registrar_adq', [InventoryController::class, 'registerStoreAdq'])->name('registrar.storeadq');
+
+    
+
+    Route::get('/componente/{id}/ver', [InventoryController::class, 'componentView'])->name('componente_ver');
 });
 
 require __DIR__.'/auth.php';

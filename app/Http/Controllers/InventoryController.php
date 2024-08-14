@@ -14,39 +14,37 @@ use Carbon\Carbon;
 
 class InventoryController extends Controller
 {
-    /**
-     * Display the user's profile form.
-     */
-    public function edit(Request $request): View
-    {
-        return view('profile.edit', [
-            'user' => $request->user(),
-        ]);
-    }
 
-    /**
-     * Update the user's profile information.
-     */
-    public function update(ProfileUpdateRequest $request): RedirectResponse
-    {
-        $request->user()->fill($request->validated());
-
-        if ($request->user()->isDirty('email')) {
-            $request->user()->email_verified_at = null;
-        }
-
-        $request->user()->save();
-
-        return Redirect::route('profile.edit')->with('status', 'profile-updated');
-    }
-
-    /**
-     * Delete the user's account.
-     */
     public function registerView(Request $request): View
     {
         $elementos = Item::all();
         return view('registrar_view', ['elementos'=>$elementos]);
+    }
+
+    public function resumen (Request  $request) {
+        
+        $elementos = Item::all();
+        $compras_por_elemento = new \stdClass();
+        $compras_totales = [];
+        foreach ($elementos as $elemento) {
+            $compras_por_elemento = new \stdClass();
+            $compras = Compra::where('cat_item_id',$elemento->id)->sum('cantidad');
+            $compras_por_elemento->descripcion_compra=$elemento->descripcion_compra;
+            $compras_por_elemento->cantidad_ocupada = $compras;
+            $compras_por_elemento->max_cap = $elemento->max_cap;
+            $compras_por_elemento->color = InventoryController::rand_color();
+            $compras_por_elemento->id=$elemento->id;
+            $compras_por_elemento->at=$elemento->at_no;
+            $compras_por_elemento->tipo=$elemento->descripcion;
+
+            array_push($compras_totales, $compras_por_elemento);
+
+        }
+        return view('resumen', ['compras' => $compras_totales] );
+    }
+
+    public function rand_color() {
+        return '#' . str_pad(dechex(mt_rand(0, 0xFFFFFF)), 6, '0', STR_PAD_LEFT);
     }
 
     public function registerStoreElem(Request $request){
@@ -70,7 +68,7 @@ class InventoryController extends Controller
          $item->max_cap = $request->input('max');
          $item->save();
          $elementos = Item::all();
-         return view('registrar_view', ['alert_element' => 'Success', 'elementos'=> $elementos]);
+         return Redirect::route('registrar.view')->with(['alert_element' => 'Success', 'elementos'=> $elementos]);
     }
     public function registerStoreAdq(Request $request){
         //$fcompra= $request->input('f_compra');
@@ -109,7 +107,12 @@ class InventoryController extends Controller
          $compra->f_compra = $date->format('Y-m-d');
          $compra->save();
          $elementos = Item::all();
-         return view('registrar_view', ['alert_element' => 'Success', 'elementos'=> $elementos]);
+         return Redirect::route('registrar.view')->with(['alert_adq' => 'Success', 'elementos'=> $elementos]);
 
+    }
+
+    public function componentView(Request $request, $id){
+        $item = Item::with('compras')->find($id);
+        return view('compras', ['item'=>$item]);
     }
 }

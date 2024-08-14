@@ -15,7 +15,7 @@
         <div class="card card-info">
             <div class="card-header">
                 <h3 class="card-title">Agregar adquisición</h3>
-                @if(isset($alert_adq) && $alert_adq == "Success")
+                @if(session()->get('alert_adq') == "Success")
                      <div class="alert alert-success alert-dismissible">
                     <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
                     <h5><i class="icon fas fa-check"></i> Correcto!</h5>
@@ -73,7 +73,7 @@
         <div class="card card-info">
             <div class="card-header">
                 <h3 class="card-title">Agregar elemento</h3>
-                @if(isset($alert_element) && $alert_element == "Success")
+                @if(session()->get('alert_element') == "Success")
                      <div class="alert alert-success alert-dismissible">
                     <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
                     <h5><i class="icon fas fa-check"></i> Correcto!</h5>
