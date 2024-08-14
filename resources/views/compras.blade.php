@@ -109,6 +109,9 @@
     <script src="/assets/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
     <script src="/assets/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
     <script src="/assets/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+    <script src="/assets/plugins/moment/moment.min.js"></script>
+    <script src="/assets/plugins/daterangepicker/daterangepicker.js"></script>
+    <script src="/assets/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script>
 
     <script>
       
@@ -123,4 +126,15 @@
     });
 
 </script>
+<script type="text/javascript">
+        $('#reservationdate').datetimepicker({
+            format: 'L',
+            locale: 'es'
+        });
+        $('.select2').select2();
+        $('.select2bs4').select2({
+          theme: 'bootstrap4'
+        })
+
+    </script>
 </x-app-layout>
