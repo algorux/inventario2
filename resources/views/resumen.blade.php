@@ -93,12 +93,28 @@
             </div>
         </div>
     </div>
+
+
+
+
     <script src="/assets/plugins/jquery-knob/jquery.knob.min.js"></script>
     <script src="/assets/plugins/sparklines/sparkline.js"></script>
     <script src="/assets/plugins/datatables/jquery.dataTables.min.js"></script>
     <script src="/assets/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+
+
     <script src="/assets/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
     <script src="/assets/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+
+    <script src="/assets/plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
+    <script src="/assets/plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
+    <script src="/assets/plugins/jszip/jszip.min.js"></script>
+    <script src="/assets/plugins/pdfmake/pdfmake.min.js"></script>
+    <script src="/assets/plugins/pdfmake/vfs_fonts.js"></script>
+    <script src="/assets/plugins/datatables-buttons/js/buttons.html5.min.js"></script>
+    <script src="/assets/plugins/datatables-buttons/js/buttons.print.min.js"></script>
+    <script src="/assets/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
+
 
     <script>
       $(function () {
@@ -166,13 +182,13 @@
     /* END JQUERY KNOB */
 
     //INITIALIZE SPARKLINE CHARTS
-        var sparkline1 = new Sparkline($('#sparkline-1')[0], { width: 240, height: 70, lineColor: '#92c1dc', endColor: '#92c1dc' })
-        var sparkline2 = new Sparkline($('#sparkline-2')[0], { width: 240, height: 70, lineColor: '#f56954', endColor: '#f56954' })
-        var sparkline3 = new Sparkline($('#sparkline-3')[0], { width: 240, height: 70, lineColor: '#3af221', endColor: '#3af221' })
+        //var sparkline1 = new Sparkline($('#sparkline-1')[0], { width: 240, height: 70, lineColor: '#92c1dc', endColor: '#92c1dc' })
+        //var sparkline2 = new Sparkline($('#sparkline-2')[0], { width: 240, height: 70, lineColor: '#f56954', endColor: '#f56954' })
+        //var sparkline3 = new Sparkline($('#sparkline-3')[0], { width: 240, height: 70, lineColor: '#3af221', endColor: '#3af221' })
 
-        sparkline1.draw([1000, 1200, 920, 927, 931, 1027, 819, 930, 1021])
-        sparkline2.draw([515, 519, 520, 522, 652, 810, 370, 627, 319, 630, 921])
-        sparkline3.draw([15, 19, 20, 22, 33, 27, 31, 27, 19, 30, 21])
+        //sparkline1.draw([1000, 1200, 920, 927, 931, 1027, 819, 930, 1021])
+        //sparkline2.draw([515, 519, 520, 522, 652, 810, 370, 627, 319, 630, 921])
+        //sparkline3.draw([15, 19, 20, 22, 33, 27, 31, 27, 19, 30, 21])
 
     })
       $('#dataTable').DataTable({
@@ -183,7 +199,8 @@
       "info": true,
       "autoWidth": false,
       "responsive": true,
-    });
+      "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"],
+    }).buttons().container().appendTo('#dataTable_wrapper .col-md-6:eq(0)');
 
 </script>
 </x-app-layout>
