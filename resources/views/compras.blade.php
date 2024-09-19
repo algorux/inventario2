@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="/assets/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
     <link rel="stylesheet" href="/assets/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
     <link rel="stylesheet" href="/assets/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
+    <link rel="stylesheet" href="/assets/plugins/fontawesome-free/css/all.min.css">
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
@@ -34,6 +35,7 @@
                                     <tr>
                                         <td>Cantidad comprada</td>
                                         <td>Fecha de compra</td>
+                                        <td>Acciones</td>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -42,6 +44,7 @@
                                     <tr>
                                         <td>{{$compra->cantidad}}</td>
                                         <td>{{$compra->f_compra}}</td>
+                                        <td><button type="button" class="btn btn-danger fa fa-trash eliminar" target="{{$compra->id}}"> </td>
                                     </tr>
                             
                                     @endforeach
@@ -141,10 +144,31 @@
             format: 'L',
             locale: 'es'
         });
-        $('.select2').select2();
-        $('.select2bs4').select2({
-          theme: 'bootstrap4'
-        })
+        //$('.select2').select2();
+        //$('.select2bs4').select2({
+        //  theme: 'bootstrap4'
+        //})
+        $(document).ready(
+            
+        function (){
+            $(".eliminar").on('click', function(){
+                var boton = $(this);
+                $.ajax({
+                  type: "DELETE",
+                   "headers": {'X-CSRF-TOKEN': '{{ csrf_token() }}'},
+                  url: "/compra/"+boton.attr("target"),
+                  //data: data,
+                  success: function(result){
+                    boton.closest("tr").remove();
+                  },
+                  error: function(request, status, error){
+                    alert(request.responseText)
+                  }
+                  //dataType: dataType
+                });
+            });
+
+        });
 
     </script>
 </x-app-layout>

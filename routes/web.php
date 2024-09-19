@@ -29,6 +29,8 @@ Route::middleware('auth')->group(function () {
     
 
     Route::get('/componente/{id}/ver', [InventoryController::class, 'componentView'])->name('componente_ver');
+
+    Route::delete('/compra/{id}', [InventoryController::class, 'compraDelete'])->name('compra_delete');
 });
 
 require __DIR__.'/auth.php';

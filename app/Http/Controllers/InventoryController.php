@@ -115,4 +115,8 @@ class InventoryController extends Controller
         $item = Item::with('compras')->find($id);
         return view('compras', ['item'=>$item]);
     }
+    public function compraDelete(Request $request, $id){
+        Compra::where('id',$id)->delete();
+        return '{"Result":"ok"}';
+    }
 }
