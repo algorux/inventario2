@@ -62,8 +62,10 @@
                                 <thead>
                                     <tr>
                                         <td>AT</td>
+                                        <td>No. Inv.</td>
                                         <td>Componente</td>
                                         <td>Tipo</td>
+                                        <td>Responsable</td>
                                         <td>Total a comprar</td>
                                         <td>Comprado</td>
                                         <td>Acciones</td>
@@ -74,11 +76,14 @@
                                 
                                     <tr>
                                         <td>{{$compra->at}}</td>
+                                        <td>{{$compra->inv_no}}</td>
                                         <td>{{$compra->descripcion_compra}}</td>
                                         <td>{{$compra->tipo}}</td>
+                                        <td>{{$compra->responsable}}</td>
                                         <td>{{$compra->max_cap}}</td>
                                         <td>{{$compra->cantidad_ocupada}}</td>
-                                        <td><a href="{{ route('componente_ver', ['id' => $compra->id]) }}">Ver componente</a></td>
+                                        <td>
+                                            <a class="btn btn-success fa fa-eye eliminar" href="{{ route('componente_ver', ['id' => $compra->id]) }}"></a><button type="button" class="btn btn-primary fa fa-edit editar" data-toggle="modal" data-target="#modal-default" target="{{$compra->id}}"> </td>
                                     </tr>
                             
                                     @endforeach
@@ -95,7 +100,91 @@
     </div>
 
 
+    <!--modal-->
+    <div class="modal fade" id="modal-default" style="display: none;" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Editar elemento</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+                    <div class="modal-body" id="body-replace">
+                        <!--Formulario edición-->
+                        <form method="POST" action="{{route('registrar.storelem')}}" id="modal-form">
+                @csrf
+                <div class="form-group">
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">#</span>
+                        </div>
+                        <input type="text" name="id" value="{{ old('id') }}" hidden id="mod_it_id">
+                        <input type="text" class="form-control" placeholder="AT" name="at" value="{{ old('at') }}" id="mod_it_at">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">#</span>
+                        </div>
+                        <input type="text" class="form-control" placeholder="Inventario" name="inv_no" value="{{ old('inv_no') }}" id="mod_it_in">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">D</span>
+                        </div>
+                        <input type="text" class="form-control" placeholder="Descripción compra" name="descrpcion" value="{{ old('descrpcion') }}" id="mod_it_des">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">T</span>
+                        </div>
+                        <input type="text" class="form-control" placeholder="Tipo" name="type" value="{{ old('type') }}" id="mod_it_typ">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">#</span>
+                        </div>
+                        <input type="number" class="form-control" placeholder="Cantidad máxima" name="max" value="{{ old('max') }}" id="mod_it_max">
+                    </div>
+                </div>
 
+                <div class="form-group">
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">R</span>
+                        </div>
+                        <select name="responsable" class="form-control" id="mod_it_res">
+                            <option value="" disabled selected>Responsable</option>
+                            <option name="Emerit">Emerit</option>
+                            <option name="TecPluss">TecPluss</option>
+                            <option name="Qplus">Qplus</option>
+                            <option name="Novitech">Novitech</option>
+                        </select>
+                        
+                    </div>
+                </div>
+                
+                
+                </form>
+                        <div class="modal-footer justify-content-between">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary" id="modal-send">Enviar</button>
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    <!--fin modal-->
 
     <script src="/assets/plugins/jquery-knob/jquery.knob.min.js"></script>
     <script src="/assets/plugins/sparklines/sparkline.js"></script>
@@ -201,6 +290,53 @@
       "responsive": true,
       "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"],
     }).buttons().container().appendTo('#dataTable_wrapper .col-md-6:eq(0)');
+    $(document).ready(function(){
+        $(".editar").on('click', function(){
+                    var boton = $(this);
+                    $.ajax({
+                      type: "GET",
+                      "headers": {'X-CSRF-TOKEN': '{{ csrf_token() }}'},
+                      url: "/componente/"+boton.attr("target"),
+                  //data: data,
+                      success: function(result){
+                    //console.log(result)
+                        var res= JSON.parse(result)
+                        
+                        $("#mod_it_id").val(res.id);
+                        $("#mod_it_res").val(res.responsable);
 
+                        $("#mod_it_max").val(res.max_cap);
+
+                        $("#mod_it_typ").val(res.descripcion)
+                        $("#mod_it_des").val(res.descripcion_compra)
+                        $("#mod_it_in").val(res.inv_no)
+                        $("#mod_it_at").val(res.at_no)
+                    },
+                    error: function(request, status, error){
+                        alert(request.responseText)
+                    }
+                  //dataType: dataType
+                });
+
+            });//fin editar
+        $("#modal-send").on('click', function(){
+                    $.ajax({
+                      type: "POST",
+                      "headers": {'X-CSRF-TOKEN': '{{ csrf_token() }}'},
+                      url: "{{route('registrar.storelem')}}",
+                      data: $("#modal-form").serialize(),
+                      success: function(result){
+                    //boton.closest("tr").remove();
+                        alert("Guardado")
+                        location.reload();
+                    },
+                    error: function(request, status, error){
+                        alert(request.responseText)
+                    }
+                  //dataType: dataType
+                });
+                    
+                });//fin modal send
+    });
 </script>
 </x-app-layout>

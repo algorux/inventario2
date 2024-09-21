@@ -64,6 +64,39 @@
                         
                     </div>
                 </div>
+                <div class="form-group">
+                    <label>Fecha estimada de entrega:</label>
+                    <div class="input-group date" id="reservationdate2" data-target-input="nearest">
+                        <div class="input-group-prepend" data-target="#reservationdate2" data-toggle="datetimepicker">
+                        <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                        </div>
+                        <input type="text" class="form-control datetimepicker-input" data-target="#reservationdate2" name="f_estimada_ent">
+                        
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Fecha efectiva de entrega:</label>
+                    <div class="input-group date" id="reservationdate3" data-target-input="nearest">
+                        <div class="input-group-prepend" data-target="#reservationdate3" data-toggle="datetimepicker">
+                        <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                        </div>
+                        <input type="text" class="form-control datetimepicker-input" data-target="#reservationdate3" name="f_entrega">
+                        
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Estatus:</label>
+                    <div class="input-group date">
+                        <div class="input-group-prepend" >
+                        <div class="input-group-text"><i class="fa fa-check"></i></div>
+                        </div>
+                        <select class="form-control" name="status">
+                            <option value="Comprado">Comprado</option>
+                            <option value="En tránsito">En tránsito</option>
+                            <option value="Entregado">Entregado</option>
+                        </select>
+                    </div>
+                </div>
                 <button type="submit" class="btn btn-primary float-right">Enviar</button>
                 </form>
 
@@ -103,7 +136,15 @@
                             <span class="input-group-text">#</span>
                         </div>
                         <input type="text" name="id" value="{{ old('id') }}" hidden>
-                        <input type="text" class="form-control" placeholder="AT" name="at" value="{{ old('AT') }}">
+                        <input type="text" class="form-control" placeholder="AT" name="at" value="{{ old('at') }}">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">#</span>
+                        </div>
+                        <input type="text" class="form-control" placeholder="Inventario" name="inv_no" value="{{ old('inv_no') }}">
                     </div>
                 </div>
                 <div class="form-group">
@@ -130,6 +171,22 @@
                         <input type="number" class="form-control" placeholder="Cantidad máxima" name="max" value="{{ old('max') }}">
                     </div>
                 </div>
+
+                <div class="form-group">
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">R</span>
+                        </div>
+                        <select name="responsable" class="form-control">
+                            <option value="" disabled selected>Responsable</option>
+                            <option name="Emerit">Emerit</option>
+                            <option name="TecPluss">TecPluss</option>
+                            <option name="Qplus">Qplus</option>
+                            <option name="Novitech">Novitech</option>
+                        </select>
+                        
+                    </div>
+                </div>
                 
                 <button type="submit" class="btn btn-primary float-right">Enviar</button>
                 </form>
@@ -137,6 +194,61 @@
             </div>
 
         </div>
+        <!--Fin de registro componentes-->
+        <!--Registro de bodegas-->
+        <div class="card card-info">
+            <div class="card-header">
+                <h3 class="card-title">Agregar Bodega</h3>
+                @if(session()->get('alert_bodega') == "Success")
+                     <div class="alert alert-success alert-dismissible">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                    <h5><i class="icon fas fa-check"></i> Correcto!</h5>
+                    Se envió correctamente.
+                    </div>
+                @endif
+                @if( $errors->any())
+                    <div class="alert alert-warning alert-dismissible">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                    <h5><i class="icon fas fa-exclamation-triangle"></i> Alerta!</h5>
+                    Hay algunos errores:
+                    <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+
+                    @endforeach
+                    </ul>
+                    </div>
+                @endif
+            </div>
+            <div class="card-body">
+                <form method="POST" action="{{route('registrar.bodega')}}">
+                @csrf
+                <div class="form-group">
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">N</span>
+                        </div>
+                        <input type="text" name="id" value="{{ old('id') }}" hidden>
+                        <input type="text" class="form-control" placeholder="Nombre Bodega" name="nombre" value="{{ old('nombre') }}">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">D</span>
+                        </div>
+                        <input type="text" class="form-control" placeholder="Dirección Bodega" name="direccion" value="{{ old('direccion') }}">
+                    </div>
+                </div>
+                
+                
+                <button type="submit" class="btn btn-primary float-right">Enviar</button>
+                </form>
+
+            </div>
+
+        </div>
+        <!--Fin registro bodegas-->
 
     </div>
     <script src="/assets/plugins/select2/js/select2.full.min.js"></script>
@@ -145,6 +257,14 @@
     <script src="/assets/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script>
     <script type="text/javascript">
         $('#reservationdate').datetimepicker({
+            format: 'L',
+            locale: 'es'
+        });
+        $('#reservationdate2').datetimepicker({
+            format: 'L',
+            locale: 'es'
+        });
+        $('#reservationdate3').datetimepicker({
             format: 'L',
             locale: 'es'
         });

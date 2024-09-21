@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
 use App\Models\Item;
 use App\Models\Compra;
+use App\Models\Bodega;
 use Carbon\Carbon;
 
 class InventoryController extends Controller
@@ -36,6 +37,8 @@ class InventoryController extends Controller
             $compras_por_elemento->id=$elemento->id;
             $compras_por_elemento->at=$elemento->at_no;
             $compras_por_elemento->tipo=$elemento->descripcion;
+            $compras_por_elemento->responsable=$elemento->responsable;
+            $compras_por_elemento->inv_no=$elemento->inv_no;
 
             array_push($compras_totales, $compras_por_elemento);
 
@@ -54,6 +57,8 @@ class InventoryController extends Controller
             'descrpcion' => 'required',
             'type' => 'required',
             'max' => 'required',
+            'responsable' => 'required|max:255',
+            'inv_no' => 'required|max:255',
             ]);
          if (isset($id) && $id>0) {
             $item = Item::find($id);
@@ -66,8 +71,14 @@ class InventoryController extends Controller
          $item->descripcion_compra = $request->input('descrpcion');
          $item->descripcion = $request->input('type');
          $item->max_cap = $request->input('max');
+         $item->responsable = $request->input('responsable');
+         $item->inv_no = $request->input('inv_no');
          $item->save();
+         if($request->ajax()){
+                return $item->toJson();
+         }
          $elementos = Item::all();
+
          return Redirect::route('registrar.view')->with(['alert_element' => 'Success', 'elementos'=> $elementos]);
     }
     public function registerStoreAdq(Request $request){
@@ -105,18 +116,66 @@ class InventoryController extends Controller
          $compra->cantidad = $request->input('cantidad');
          $date = Carbon::parse($request->input('f_compra'));
          $compra->f_compra = $date->format('Y-m-d');
+         if ($request->has('f_estimada_ent') && $request->input('f_estimada_ent') != "") {
+             $date = Carbon::parse($request->input('f_estimada_ent'));
+            $compra->f_estimada_ent = $date->format('Y-m-d');
+         }
+         if ($request->has('f_entrega')&& $request->input('f_entrega') != "") {
+             $date = Carbon::parse($request->input('f_entrega'));
+            $compra->f_entrega = $date->format('Y-m-d');
+         }
+
+         if ($request->has('status')) {
+             $compra->status = $request->input('status');
+         }
+         if ($request->has('bodega_id')) {
+             $compra->bodega_id = $request->input('bodega_id');
+         }
          $compra->save();
+         if($request->ajax()){
+                return $compra->toJson();
+         }
          $elementos = Item::all();
+         
          return Redirect::route('registrar.view')->with(['alert_adq' => 'Success', 'elementos'=> $elementos]);
 
     }
 
     public function componentView(Request $request, $id){
         $item = Item::with('compras')->find($id);
-        return view('compras', ['item'=>$item]);
+        $cat_bodegas = Bodega::all();
+        return view('compras', ['item'=>$item, 'bodegas' => $cat_bodegas]);
     }
     public function compraDelete(Request $request, $id){
         Compra::where('id',$id)->delete();
         return '{"Result":"ok"}';
+    }
+    public function compraGet(Request $request, $id){
+        $compra = Compra::find($id);
+        return $compra->toJson();
+    }
+    public function componenteGet(Request $request, $id){
+        $compra = Item::find($id);
+        return $compra->toJson();
+    }
+
+    public function registerBodega(Request $request){
+        $id = $request->input('id');
+         $validated = $request->validate([
+            'nombre' => 'required|max:255',
+            'direccion' => 'required|max:255',
+            ]);
+         if (isset($id) && $id>0) {
+            $bodega = Bodega::find($id);
+         }
+         else{
+            $bodega = new Bodega;
+         }  
+         
+         $bodega->nombre = $request->input('nombre');
+         $bodega->direccion = $request->input('direccion');
+         $bodega->save();
+         $elementos = Item::all();
+         return Redirect::route('registrar.view')->with(['alert_bodega' => 'Success', 'elementos'=> $elementos]);
     }
 }
