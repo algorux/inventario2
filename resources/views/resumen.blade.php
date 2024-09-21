@@ -67,7 +67,7 @@
                                         <td>Tipo</td>
                                         <td>Responsable</td>
                                         <td>Total a comprar</td>
-                                        <td>Comprado</td>
+                                        <td>Entregado</td>
                                         <td>Acciones</td>
                                     </tr>
                                 </thead>

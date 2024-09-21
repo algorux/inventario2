@@ -29,7 +29,7 @@ class InventoryController extends Controller
         $compras_totales = [];
         foreach ($elementos as $elemento) {
             $compras_por_elemento = new \stdClass();
-            $compras = Compra::where('cat_item_id',$elemento->id)->sum('cantidad');
+            $compras = Compra::where('cat_item_id',$elemento->id)->where('status', 'Entregado')->sum('cantidad');
             $compras_por_elemento->descripcion_compra=$elemento->descripcion_compra;
             $compras_por_elemento->cantidad_ocupada = $compras;
             $compras_por_elemento->max_cap = $elemento->max_cap;
