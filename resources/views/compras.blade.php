@@ -44,26 +44,26 @@
                                         </thead>
                                         <tbody>
                                             @foreach($item->compras as $key => $compra)
-                                            
+
                                             <tr>
                                                 <td>{{$compra->cantidad}}</td>
                                                 <td>{{$compra->f_compra}}</td>
                                                 <td>{{$compra->f_estimada_ent}}</td>
                                                 <td>{{$compra->f_entrega}}</td>
                                                 <td>{{$compra->status}}</td>
+                                                <td>
                                                 @foreach($bodegas as $bodega)
                                                 @if($bodega->id == $compra->bodega_id)
-                                                <td>{{$bodega->nombre}}</td>
-                                                @else
-                                                <td></td>
+                                                {{$bodega->nombre}}
                                                 @endif
                                                 @endforeach
-                                                
+                                                </td>
+
                                                 <td><button type="button" class="btn btn-danger fa fa-trash eliminar" target="{{$compra->id}}">
                                                     <button type="button" class="btn btn-primary fa fa-edit editar" data-toggle="modal" data-target="#modal-default" target="{{$compra->id}}"> 
                                                     </td>
                                                 </tr>
-                                                
+
                                                 @endforeach
                                             </tbody>
                                         </table>
@@ -86,7 +86,7 @@
                             </div>
                             <div class="card-body">
                                 <div class="row">
-                                    
+
 
                                     <form method="POST" action="{{route('registrar.storeadq')}}">
                                         @csrf
@@ -107,7 +107,7 @@
                                                     <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                                                 </div>
                                                 <input type="text" class="form-control datetimepicker-input" data-target="#reservationdate" name="f_compra">
-                                                
+
                                             </div>
                                         </div>
                                         <div class="form-group">
@@ -117,7 +117,7 @@
                                                     <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                                                 </div>
                                                 <input type="text" class="form-control datetimepicker-input" data-target="#reservationdate2" name="f_estimada_ent">
-                                                
+
                                             </div>
                                         </div>
                                         <div class="form-group">
@@ -127,7 +127,7 @@
                                                     <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                                                 </div>
                                                 <input type="text" class="form-control datetimepicker-input" data-target="#reservationdate3" name="f_entrega">
-                                                
+
                                             </div>
                                         </div>
                                         <div class="form-group">
@@ -285,7 +285,7 @@
         <script src="/assets/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script>
 
         <script>
-          
+
           $('#dataTable').DataTable({
               "paging": true,
               "lengthChange": false,
@@ -324,7 +324,7 @@
             locale: 'es'
         });
         $(document).ready(
-            
+
             function (){
                 $(".eliminar").on('click', function(){
                     var boton = $(this);
@@ -392,7 +392,7 @@
                     }
                   //dataType: dataType
                 });
-                    
+
                 });
 
             });
