@@ -4,6 +4,9 @@
             {{ __('Dashboard') }}
         </h2>
     </x-slot>
+    <link rel="stylesheet" href="/assets/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" href="/assets/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
+    <link rel="stylesheet" href="/assets/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
     <!-- fullCalendar -->
     <link rel="stylesheet" href="/assets/plugins/fullcalendar/main.css">
     <div class="py-12">
@@ -54,7 +57,7 @@
             <!-- /.card -->
                     <div class="card card-info">
                         <div class="card-header">
-                            <h3 class="card-title">Navegar</h3>
+                            <h3 class="card-title">Tablas por estatus</h3>
                             <div class="card-tools">
                                 <button type="button" class="btn btn-tool" data-card-widget="collapse">
                                     <i class="fas fa-minus"></i>
@@ -66,9 +69,101 @@
                         </div>
                         
 
-                        <div class="card-body p-0">
-                            <!-- THE CALENDAR -->
-                            <div id="calendar"></div>
+                        <div class="card-body">
+                            <!-- Tabla de comprados -->
+                            <br>
+                            <h3>Comprados</h3>
+                            <table class="table table-bordered table-hover dataTable dtr-inline" id="dataTable">
+                                <thead>
+                                    <tr>
+                                        <td>Componente</td>
+                                        <td>Inv.</td>
+                                        <td>AT</td>
+                                        <td>Responsable</td>
+                                        <td>Cantidad</td>
+                                        <td>Fecha Compra</td>
+                                        <td>Fecha Est. Entrega</td>
+                                        <td>Fecha Efec. Entrega</td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                        @foreach($t_compras as $item)
+                                    <tr>
+                                        <td>{{$item->item->descripcion_compra}}</td>
+                                        <td>{{$item->item->inv_no}}</td>
+                                        <td>{{$item->item->at_no}}</td>
+                                        <td>{{$item->item->responsable}}</td>
+                                        <td>{{$item->cantidad}}</td>
+                                        <td>{{$item->f_compra}}</td>
+                                        <td>{{$item->f_estimada_ent}}</td>
+                                        <td>{{$item->f_ent}}</td>
+                                    </tr>
+                                        @endforeach
+                                </tbody>
+                            </table>
+                            <!-- Tabla de tránsito -->
+                            <br>
+                            <h3>En tránsito</h3>
+                            <table class="table table-bordered table-hover dataTable dtr-inline" id="dataTable2">
+                                <thead>
+                                    <tr>
+                                        <td>Componente</td>
+                                        <td>Inv.</td>
+                                        <td>AT</td>
+                                        <td>Responsable</td>
+                                        <td>Cantidad</td>
+                                        <td>Fecha Compra</td>
+                                        <td>Fecha Est. Entrega</td>
+                                        <td>Fecha Efec. Entrega</td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                        @foreach($t_transito as $item)
+                                    <tr>
+                                        <td>{{$item->item->descripcion_compra}}</td>
+                                        <td>{{$item->item->inv_no}}</td>
+                                        <td>{{$item->item->at_no}}</td>
+                                        <td>{{$item->item->responsable}}</td>
+                                        <td>{{$item->cantidad}}</td>
+                                        <td>{{$item->f_compra}}</td>
+                                        <td>{{$item->f_estimada_ent}}</td>
+                                        <td>{{$item->f_ent}}</td>
+                                    </tr>
+                                        @endforeach
+                                </tbody>
+                            </table>
+                            <!-- Tabla de entregados -->
+                            <br>
+                            <h3>Entregados</h3>
+                            <table class="table table-bordered table-hover dataTable dtr-inline" id="dataTable3">
+                                <thead>
+                                    <tr>
+                                        <td>Componente</td>
+                                        <td>Inv.</td>
+                                        <td>AT</td>
+                                        <td>Responsable</td>
+                                        <td>Cantidad</td>
+                                        <td>Fecha Compra</td>
+                                        <td>Fecha Est. Entrega</td>
+                                        <td>Fecha Efec. Entrega</td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                        @foreach($t_entregado as $item)
+                                    <tr>
+                                        <td>{{$item->item->descripcion_compra}}</td>
+                                        <td>{{$item->item->inv_no}}</td>
+                                        <td>{{$item->item->at_no}}</td>
+                                        <td>{{$item->item->responsable}}</td>
+                                        <td>{{$item->cantidad}}</td>
+                                        <td>{{$item->f_compra}}</td>
+                                        <td>{{$item->f_estimada_ent}}</td>
+                                        <td>{{$item->f_ent}}</td>
+                                    </tr>
+                                        @endforeach
+                                </tbody>
+                            </table>
+
                         </div>
                         <!-- /.card-body -->
                         
@@ -84,7 +179,55 @@
 <script src="/assets/plugins/fullcalendar/main.js"></script>
 <!-- ChartJS -->
 <script src="/assets/plugins/chart.js/Chart.min.js"></script>
+<!-- Datatables -->
+<script src="/assets/plugins/datatables/jquery.dataTables.min.js"></script>
+        <script src="/assets/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+<script src="/assets/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+<script src="/assets/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+<script src="/assets/plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
+<script src="/assets/plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
+<script src="/assets/plugins/jszip/jszip.min.js"></script>
+<script src="/assets/plugins/pdfmake/pdfmake.min.js"></script>
+<script src="/assets/plugins/pdfmake/vfs_fonts.js"></script>
+<script src="/assets/plugins/datatables-buttons/js/buttons.html5.min.js"></script>
+<script src="/assets/plugins/datatables-buttons/js/buttons.print.min.js"></script>
+<script src="/assets/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
 
+<script>
+
+  $('#dataTable').DataTable({
+      "paging": true,
+      "lengthChange": false,
+      "searching": true,
+      "ordering": true,
+      "info": true,
+      "autoWidth": false,
+      "responsive": true,
+      "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"],
+  }).buttons().container().appendTo('#dataTable_wrapper .col-md-6:eq(0)');
+
+  $('#dataTable2').DataTable({
+      "paging": true,
+      "lengthChange": false,
+      "searching": true,
+      "ordering": true,
+      "info": true,
+      "autoWidth": false,
+      "responsive": true,
+      "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"],
+  }).buttons().container().appendTo('#dataTable2_wrapper .col-md-6:eq(0)');
+
+$('#dataTable3').DataTable({
+      "paging": true,
+      "lengthChange": false,
+      "searching": true,
+      "ordering": true,
+      "info": true,
+      "autoWidth": false,
+      "responsive": true,
+      "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"],
+  }).buttons().container().appendTo('#dataTable3_wrapper .col-md-6:eq(0)');
+</script>
 <script>
     $(function () {
         //--------------
@@ -106,7 +249,7 @@
               pointStrokeColor    : 'rgba(60,141,188,1)',
               pointHighlightFill  : '#fff',
               pointHighlightStroke: 'rgba(60,141,188,1)',
-              data                : [{{28, 48, 40, 19, 86, 27}}]
+              data                : [{{implode(", ", $b_comprados)}}]
             },
             {
               label               : 'En tránsito',
@@ -117,7 +260,7 @@
               pointStrokeColor    : '#c1c7d1',
               pointHighlightFill  : '#fff',
               pointHighlightStroke: 'rgba(220,220,220,1)',
-              data                : [65, 59, 80, 81, 56, 55]
+              data                : [{{implode(", ", $b_transito)}}]
             },
 
             {
@@ -129,7 +272,7 @@
               pointStrokeColor    : '#c1c7d1',
               pointHighlightFill  : '#fff',
               pointHighlightStroke: 'rgba(220,220,220,1)',
-              data                : [65, 59, 80, 81, 56, 55]
+              data                : [{{implode(", ", $b_entregados)}}]
             },
           ]
         }

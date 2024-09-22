@@ -21,6 +21,7 @@
             <ul aria-labelledby="dropdownSubMenu1" class="dropdown-menu border-0 shadow" style="left: 0px; right: inherit;">
               <li><x-nav-link :href="route('resumen')" :active="request()->routeIs('resumen')">{{ __('Resumen') }}</x-nav-link></li>
               <li><x-nav-link :href="route('registrar.view')" :active="request()->routeIs('registrar.view')">{{ __('Registrar') }}</x-nav-link></li>
+              <li><x-nav-link :href="route('more_data')" :active="request()->routeIs('more_data')">{{ __('Más estadísticas') }}</x-nav-link></li>
 
             </ul>
           </li>

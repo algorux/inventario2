@@ -26,7 +26,7 @@ class Compra extends Model
 
     public function item(): HasOne
     {
-        return $this->hasOne(PersonaSSN::class, 'id', 'cat_item_id');
+        return $this->hasOne(Item::class, 'id', 'cat_item_id');
     }
 
 

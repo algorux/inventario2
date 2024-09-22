@@ -189,7 +189,7 @@ class InventoryController extends Controller
         $faltantes= $total_compras = Item::all()->sum('max_cap');
         $statuses = [];
         $entregados = $comprados = $transito = 0;
-        $b_comprados = $b_transito = $b_entregados= [];
+        $b_comprados = $b_transito = $b_entregados= [0,0,0,0,0,0];
         $meses = [
             //mes[0] -> fecha_inicial
             //mes[1] -> fecha_final
@@ -205,36 +205,38 @@ class InventoryController extends Controller
         ];
         
         foreach($compras as $compra){
-            //if (strtotime($compra->f_compra)>strtotime('01-08-2024') && strtotime($compra->f_compra)<strtotime('31-08-2024')) {
-            //    echo $compra->f_compra . " - " . $compra->cantidad."\n";
-            //}
-            //else
-            //{
-            //    echo $compra->f_compra . " - no\n";
-            //}
+            
             if ($compra->status == "Entregado") {
                 $entregados += $compra->cantidad;
+                $conta_meses=0;
                 foreach($meses as $mes=>$data){
                     if (strtotime($compra->f_compra)>$data[0] && strtotime($compra->f_compra)<$data[1]) {
-                        //$data[4] = $data[4]+intval($compra->cantidad);
-                        //echo $mes." - ".$data[4]."<br>";
+                        $meses[$mes][4] += intval($compra->cantidad);
+                        $b_entregados[$conta_meses] += intval($compra->cantidad);
                     }
+                    $conta_meses++;
                 }
             }
             else if ($compra->status == "Comprado") {
                 $comprados += $compra->cantidad;
+                $conta_meses=0;
                 foreach($meses as $mes=>$data){
                     if (strtotime($compra->f_compra)>$data[0] && strtotime($compra->f_compra)<$data[1]) {
-                        $data[2] += $compra->cantidad;
+                        $meses[$mes][2] += intval($compra->cantidad);
+                        $b_comprados[$conta_meses]+= intval($compra->cantidad);
                     }
+                    $conta_meses++;
                 }
             }
             else if ($compra->status == "En tránsito") {
                 $transito += $compra->cantidad;
+                $conta_meses =0;
                 foreach($meses as $mes=>$data){
                     if (strtotime($compra->f_compra)>$data[0] && strtotime($compra->f_compra)<$data[1]) {
-                        $data[3] += $compra->cantidad;
+                        $meses[$mes][3] += intval($compra->cantidad);
+                        $b_transito[$conta_meses] += intval($compra->cantidad);
                     }
+                    $conta_meses++;
                 }
             }
             
@@ -243,15 +245,21 @@ class InventoryController extends Controller
         }
         
         //echo "<pre>";
-        //var_dump($meses);
+        //var_dump($b_entregados);
         //echo "</pre>";
         //die();
-
+        $t_compras = Compra::where('status', "Comprado")->with('item')->get();
+        $t_transito = Compra::where('status', "En tránsito")->with('item')->get();
+        $t_entregado = Compra::where('status', "Entregado")->with('item')->get();
         $totales =  [$comprados, $transito, $entregados, $faltantes];
-        return view('more_data', ['status_data'=>$totales, 
-            'b_comprados', $b_comprados,
-            'b_transito', $b_transito,
-            'b_entregados', $b_entregados,
+        return view('more_data', [
+            'status_data'=>$totales, 
+            'b_comprados'=> $b_comprados,
+            'b_transito'=> $b_transito,
+            'b_entregados'=> $b_entregados, 
+            't_compras' => $t_compras,
+            't_transito' => $t_transito,
+            't_entregado' => $t_entregado,
         ]);
     }
 }
