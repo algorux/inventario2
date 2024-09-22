@@ -352,6 +352,8 @@
                       success: function(result){
                     //console.log(result)
                         var res= JSON.parse(result)
+                        $("#mod_it_stat").val(res.status)
+                        $("#mod_it_bod").val(res.bodega_id)
                         var parts = res.f_compra.split("-");
                         var date = new Date(parts[0],parts[1],parts[2]);
                         var formattedDate = `${date.getMonth()}/${date.getDate()}/${date.getFullYear()}`;
@@ -366,8 +368,7 @@
                         date = new Date(parts[0],parts[1],parts[2]);
                         formattedDate = `${date.getMonth()}/${date.getDate()}/${date.getFullYear()}`;
                         $("#mod_it_f_ef_en").val(formattedDate);
-                        $("#mod_it_stat").val(res.status)
-                        $("#mod_it_bod").val(res.bodega_id)
+                        
                     },
                     error: function(request, status, error){
                         alert(request.responseText)

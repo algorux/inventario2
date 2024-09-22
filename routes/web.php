@@ -36,6 +36,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/registrar_bodega', [InventoryController::class, 'registerBodega'])->name('registrar.bodega');
 
     Route::get('/componente/{id}', [InventoryController::class, 'componenteGet'])->name('componente_get');
+    Route::get('/more_data', [InventoryController::class, 'moreData'])->name('more_data');
 });
 
 require __DIR__.'/auth.php';

@@ -53,7 +53,7 @@ class InventoryController extends Controller
     public function registerStoreElem(Request $request){
          $id = $request->input('id');
          $validated = $request->validate([
-            'at' => 'required|max:255',
+            'inv_no' => 'required|max:255',
             'descrpcion' => 'required',
             'type' => 'required',
             'max' => 'required',
@@ -180,5 +180,78 @@ class InventoryController extends Controller
          $bodega->save();
          $elementos = Item::all();
          return Redirect::route('registrar.view')->with(['alert_bodega' => 'Success', 'elementos'=> $elementos]);
+    }
+
+    public function moreData(){
+        //echo date("d/m/Y",strtotime('01-07-2024'));
+        //die();
+        $compras = Compra::all();
+        $faltantes= $total_compras = Item::all()->sum('max_cap');
+        $statuses = [];
+        $entregados = $comprados = $transito = 0;
+        $b_comprados = $b_transito = $b_entregados= [];
+        $meses = [
+            //mes[0] -> fecha_inicial
+            //mes[1] -> fecha_final
+            //mes[2] -> comprados
+            //mes[3] -> transito
+            //mes[4] -> entregados
+            'Julio'=>[strtotime('01-07-2024'), strtotime('31-07-2024'),0,0,0],
+            'Agosto'=>[strtotime('01-08-2024'), strtotime('31-08-2024'),0,0,0],
+            'Septiembre'=>[strtotime('01-09-2024'), strtotime('30-09-2024'),0,0,0],
+            'Octubre'=>[strtotime('01-10-2024'), strtotime('31-10-2024'),0,0,0],
+            'Noviembre'=>[strtotime('01-11-2024'), strtotime('30-11-2024'),0,0,0],
+            'Diciembre'=>[strtotime('01-11-2024'), strtotime('31-11-2024'),0,0,0],
+        ];
+        
+        foreach($compras as $compra){
+            //if (strtotime($compra->f_compra)>strtotime('01-08-2024') && strtotime($compra->f_compra)<strtotime('31-08-2024')) {
+            //    echo $compra->f_compra . " - " . $compra->cantidad."\n";
+            //}
+            //else
+            //{
+            //    echo $compra->f_compra . " - no\n";
+            //}
+            if ($compra->status == "Entregado") {
+                $entregados += $compra->cantidad;
+                foreach($meses as $mes=>$data){
+                    if (strtotime($compra->f_compra)>$data[0] && strtotime($compra->f_compra)<$data[1]) {
+                        //$data[4] = $data[4]+intval($compra->cantidad);
+                        //echo $mes." - ".$data[4]."<br>";
+                    }
+                }
+            }
+            else if ($compra->status == "Comprado") {
+                $comprados += $compra->cantidad;
+                foreach($meses as $mes=>$data){
+                    if (strtotime($compra->f_compra)>$data[0] && strtotime($compra->f_compra)<$data[1]) {
+                        $data[2] += $compra->cantidad;
+                    }
+                }
+            }
+            else if ($compra->status == "En tránsito") {
+                $transito += $compra->cantidad;
+                foreach($meses as $mes=>$data){
+                    if (strtotime($compra->f_compra)>$data[0] && strtotime($compra->f_compra)<$data[1]) {
+                        $data[3] += $compra->cantidad;
+                    }
+                }
+            }
+            
+            $total_compras -= $compra->cantidad;
+
+        }
+        
+        //echo "<pre>";
+        //var_dump($meses);
+        //echo "</pre>";
+        //die();
+
+        $totales =  [$comprados, $transito, $entregados, $faltantes];
+        return view('more_data', ['status_data'=>$totales, 
+            'b_comprados', $b_comprados,
+            'b_transito', $b_transito,
+            'b_entregados', $b_entregados,
+        ]);
     }
 }
