@@ -210,7 +210,7 @@ class InventoryController extends Controller
                 $entregados += $compra->cantidad;
                 $conta_meses=0;
                 foreach($meses as $mes=>$data){
-                    if (strtotime($compra->f_compra)>$data[0] && strtotime($compra->f_compra)<$data[1]) {
+                    if (strtotime($compra->f_entrega)>$data[0] && strtotime($compra->f_entrega)<$data[1]) {
                         $meses[$mes][4] += intval($compra->cantidad);
                         $b_entregados[$conta_meses] += intval($compra->cantidad);
                     }
@@ -221,7 +221,7 @@ class InventoryController extends Controller
                 $comprados += $compra->cantidad;
                 $conta_meses=0;
                 foreach($meses as $mes=>$data){
-                    if (strtotime($compra->f_compra)>$data[0] && strtotime($compra->f_compra)<$data[1]) {
+                    if (strtotime($compra->f_estimada_ent)>$data[0] && strtotime($compra->f_estimada_ent)<$data[1]) {
                         $meses[$mes][2] += intval($compra->cantidad);
                         $b_comprados[$conta_meses]+= intval($compra->cantidad);
                     }
