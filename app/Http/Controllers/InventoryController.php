@@ -244,10 +244,10 @@ class InventoryController extends Controller
 
         }
         
-        //echo "<pre>";
-        //var_dump($b_entregados);
-        //echo "</pre>";
-        //die();
+        echo "<pre>";
+        var_dump($meses);
+        echo "</pre>";
+        die();
         $t_compras = Compra::where('status', "Comprado")->with('item')->get();
         $t_transito = Compra::where('status', "En tránsito")->with('item')->get();
         $t_entregado = Compra::where('status', "Entregado")->with('item')->get();
