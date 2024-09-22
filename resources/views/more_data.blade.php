@@ -96,7 +96,7 @@
                                         <td>{{$item->cantidad}}</td>
                                         <td>{{$item->f_compra}}</td>
                                         <td>{{$item->f_estimada_ent}}</td>
-                                        <td>{{$item->f_ent}}</td>
+                                        <td>{{$item->f_entrega}}</td>
                                     </tr>
                                         @endforeach
                                 </tbody>
@@ -127,7 +127,7 @@
                                         <td>{{$item->cantidad}}</td>
                                         <td>{{$item->f_compra}}</td>
                                         <td>{{$item->f_estimada_ent}}</td>
-                                        <td>{{$item->f_ent}}</td>
+                                        <td>{{$item->f_entrega}}</td>
                                     </tr>
                                         @endforeach
                                 </tbody>
@@ -158,7 +158,7 @@
                                         <td>{{$item->cantidad}}</td>
                                         <td>{{$item->f_compra}}</td>
                                         <td>{{$item->f_estimada_ent}}</td>
-                                        <td>{{$item->f_ent}}</td>
+                                        <td>{{$item->f_entrega}}</td>
                                     </tr>
                                         @endforeach
                                 </tbody>
