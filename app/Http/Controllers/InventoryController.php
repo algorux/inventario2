@@ -87,7 +87,12 @@ class InventoryController extends Controller
         //die();
 
         $id = $request->input('id');
-        
+        if (isset($id) && $id>0) {
+            $compra = Compra::find($id);
+         }
+         else{
+            $compra = new Compra;
+         }  
         if (null != $request->input('cantidad')&& null != $request->input('cat_item_id')) 
         {
 
@@ -95,6 +100,9 @@ class InventoryController extends Controller
             $item = Item::find($cat_item_id);
             $compras = Compra::where('cat_item_id',$cat_item_id)->sum('cantidad');
             $out = $item->max_cap-$compras;
+            if (isset($id) && $id>0) {
+                $out += $compra->cantidad;
+            }
         }
         else
         {
@@ -105,12 +113,7 @@ class InventoryController extends Controller
             'cantidad' => 'required|integer|max:'.$out,
             'f_compra' => 'required',
             ]);
-         if (isset($id) && $id>0) {
-            $compra = Compra::find($id);
-         }
-         else{
-            $compra = new Compra;
-         }  
+         
          
          $compra->cat_item_id = $request->input('cat_item_id');
          $compra->cantidad = $request->input('cantidad');
