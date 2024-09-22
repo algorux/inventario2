@@ -201,7 +201,7 @@ class InventoryController extends Controller
             'Septiembre'=>[strtotime('01-09-2024'), strtotime('30-09-2024'),0,0,0],
             'Octubre'=>[strtotime('01-10-2024'), strtotime('31-10-2024'),0,0,0],
             'Noviembre'=>[strtotime('01-11-2024'), strtotime('30-11-2024'),0,0,0],
-            'Diciembre'=>[strtotime('01-11-2024'), strtotime('31-11-2024'),0,0,0],
+            'Diciembre'=>[strtotime('01-12-2024'), strtotime('31-12-2024'),0,0,0],
         ];
         
         foreach($compras as $compra){
