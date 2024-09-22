@@ -16,7 +16,7 @@
                     <!-- DONUT CHART -->
             <div class="card card-danger">
               <div class="card-header">
-                <h3 class="card-title">Donut Chart</h3>
+                <h3 class="card-title">Estadisticas generales</h3>
 
                 <div class="card-tools">
                   <button type="button" class="btn btn-tool" data-card-widget="collapse">
@@ -36,7 +36,7 @@
             <!-- BAR CHART -->
             <div class="card card-success">
               <div class="card-header">
-                <h3 class="card-title">Bar Chart</h3>
+                <h3 class="card-title">Estadísticas por mes</h3>
 
                 <div class="card-tools">
                   <button type="button" class="btn btn-tool" data-card-widget="collapse">
@@ -72,7 +72,7 @@
                         <div class="card-body">
                             <!-- Tabla de comprados -->
                             <br>
-                            <h3>Comprados</h3>
+                            <h3>Comprados (no entregados)</h3>
                             <table class="table table-bordered table-hover dataTable dtr-inline" id="dataTable">
                                 <thead>
                                     <tr>
